@@ -2,8 +2,8 @@ import { useState } from "react";
 import { FaEye, FaRegEye } from "react-icons/fa";
 import AuthLink from "./AuthLink";
 
-const Register = () => {
-    const [user, setUser] = useState({ name: "", email: "", password: "" });
+const Login = () => {
+    const [user, setUser] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false)
 
     const handleChange = (e) => {
@@ -22,25 +22,8 @@ const Register = () => {
                 className="w-full max-w-sm px-8 py-6 shadow-lg rounded-lg bg-white"
             >
                 <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-                    Register
+                    Login
                 </h2>
-
-                <div className="mb-4">
-                    <label
-                        htmlFor="name"
-                        className="label"
-                    >
-                        Name
-                    </label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={user.name}
-                        onChange={handleChange}
-                        placeholder="Enter your name"
-                        className="input"
-                    />
-                </div>
 
                 <div className="mb-4">
                     <label
@@ -87,19 +70,18 @@ const Register = () => {
                         type="submit"
                         className="submitBtn"
                     >
-                        Register
+                        Login
                     </button>
                 </div>
 
                 <AuthLink
-                    text="Already have an Account?"
-                    linkText="Login here"
-                    to="/login"
+                    text="Create a new Account?"
+                    linkText="Register here"
+                    to="/register"
                 />
-
             </form>
         </div>
     );
 };
 
-export default Register;
+export default Login;
