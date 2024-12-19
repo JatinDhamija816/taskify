@@ -44,12 +44,27 @@ export const login = async (req, res) => {
         // Generate both access and refresh tokens using the utility function
         const { accessToken, refreshToken } = generateTokens(existingUser._id, existingUser.email);
 
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            path: '/',
+            sameSite: 'Lax',
+            expires: new Date(Date.now() + 3600000), // expires in 1 hour
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            path: '/',
+            sameSite: 'Lax',
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // expires in 7 days
+        });
+
         // Send response with both tokens
         return res.status(200).json({
             success: true,
             message: 'Login successful',
-            accessToken, // Send access token
-            refreshToken, // Send refresh token
+
         });
 
     } catch (error) {
