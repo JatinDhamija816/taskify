@@ -12,7 +12,7 @@ const Home = () => {
             <div className="flex justify-between items-center bg-gray-800 py-4 px-6 shadow-md">
                 <div>
                     <h1 className="text-2xl font-bold text-white italic font-mono">
-                        Taskify
+                        taskify
                     </h1>
                 </div>
 
@@ -31,12 +31,12 @@ const Home = () => {
                 {/* Navbar Buttons (visible on desktop) */}
                 <div className="hidden md:flex space-x-4">
                     <Link to="/register">
-                        <button className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-300">
+                        <button className="navDesktopBtn">
                             Register
                         </button>
                     </Link>
                     <Link to="/login">
-                        <button className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-300">
+                        <button className="navDesktopBtn">
                             Login
                         </button>
                     </Link>
@@ -47,12 +47,12 @@ const Home = () => {
             {sideButton && (
                 <div className="bg-gray-800 md:hidden text-white w-full">
                     <Link to="/register">
-                        <button className="py-3 text-xl w-full text-center hover:bg-gray-900 transition duration-300">
+                        <button className="navMobileBtn">
                             Register
                         </button>
                     </Link>
                     <Link to="/login">
-                        <button className="py-3 text-xl w-full text-center hover:bg-gray-900 transition duration-300">
+                        <button className="navMobileBtn">
                             Login
                         </button>
                     </Link>

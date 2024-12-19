@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaRegEye } from "react-icons/fa";
 import AuthLink from "./AuthLink";
+import { login } from "../utils/apiCalls";
 
 const Login = () => {
     const [user, setUser] = useState({ email: "", password: "" });
@@ -10,9 +11,14 @@ const Login = () => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(user);
+        try {
+            const res = await login(user)
+            console.log(res)
+        } catch (error) {
+            alert('Error', error)
+        }
     };
 
     return (
