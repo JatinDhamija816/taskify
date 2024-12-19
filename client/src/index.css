@@ -17,3 +17,11 @@
 .submitBtn{
     @apply w-full bg-blue-500 text-white text-sm font-semibold py-2 rounded-md shadow-lg hover:bg-blue-600 transition
 }
+
+.navDesktopBtn{
+    @apply bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-300
+}
+
+.navMobileBtn{
+    @apply py-3 text-xl w-full text-center hover:bg-gray-900 transition duration-300
+}
