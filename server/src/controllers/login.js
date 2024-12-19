@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
+import { generateTokens } from '../utils/tokenUtils.js';
 
 export const login = async (req, res) => {
     try {
@@ -40,11 +41,17 @@ export const login = async (req, res) => {
             });
         }
 
-        // Success response
+        // Generate both access and refresh tokens using the utility function
+        const { accessToken, refreshToken } = generateTokens(existingUser._id, existingUser.email);
+
+        // Send response with both tokens
         return res.status(200).json({
             success: true,
             message: 'Login successful',
+            accessToken, // Send access token
+            refreshToken, // Send refresh token
         });
+
     } catch (error) {
         res.status(500).json({
             success: false,
