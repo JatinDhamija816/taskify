@@ -14,10 +14,18 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await login(user)
+            // Make the login request
+            const res = await login(user); // Assuming `login` is an API call function
+            const { message } = res.data;
             console.log(res)
+            console.log(message); // Log the success message
+
+
+            alert('Login successful');
+            // Redirect user or perform other actions
         } catch (error) {
-            alert('Error', error)
+            console.error('Error during login:', error);
+            alert('Login failed. Please try again.');
         }
     };
 
