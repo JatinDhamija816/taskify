@@ -65,14 +65,12 @@ const Login = () => {
                     </div>
                 </div>
 
-                <div>
-                    <button
-                        type="submit"
-                        className="submitBtn"
-                    >
-                        Login
-                    </button>
-                </div>
+                <button
+                    type="submit"
+                    className="submitBtn"
+                >
+                    Login
+                </button>
 
                 <AuthLink
                     text="Create a new Account?"
