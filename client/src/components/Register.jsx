@@ -82,14 +82,12 @@ const Register = () => {
                     </div>
                 </div>
 
-                <div>
-                    <button
-                        type="submit"
-                        className="submitBtn"
-                    >
-                        Register
-                    </button>
-                </div>
+                <button
+                    type="submit"
+                    className="submitBtn"
+                >
+                    Register
+                </button>
 
                 <AuthLink
                     text="Already have an Account?"
