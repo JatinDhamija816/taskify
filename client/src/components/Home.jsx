@@ -3,10 +3,12 @@ import { FaBars } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { check_login, logout } from "../utils/apiCalls";
+import NewTaskModal from "./NewTaskModal";
 
 const Home = () => {
     const [sideButton, setSideButton] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const checkLoginStatus = async () => {
@@ -27,8 +29,23 @@ const Home = () => {
             await logout()
             setIsLoggedIn(false);
         } catch (error) {
+            alert('Logout failed', error)
             console.error("Logout failed:", error);
         }
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const addTask = (taskData) => {
+        // Here, send the taskData to your backend API to store it
+        console.log('Task Added:', taskData);
+        // You can use Axios or Fetch here to make the API call.
     };
 
     return (
@@ -55,9 +72,7 @@ const Home = () => {
                 <div className="hidden md:flex space-x-4">
                     {isLoggedIn ? (
                         <>
-                            <Link to="/new-task">
-                                <button className="navDesktopBtn">+ New Task</button>
-                            </Link>
+                            <button onClick={openModal} className="navDesktopBtn">+ New Task</button>
                             <button
                                 onClick={handleLogout}
                                 className="navDesktopBtn bg-red-500 hover:bg-red-600"
@@ -83,9 +98,7 @@ const Home = () => {
                 <div className="bg-gray-800 md:hidden text-white w-full">
                     {isLoggedIn ? (
                         <>
-                            <Link to="/new-task">
-                                <button className="navMobileBtn">+ New Task</button>
-                            </Link>
+                            <button onClick={openModal} className="navMobileBtn">+ New Task</button>
                             <button
                                 onClick={handleLogout}
                                 className="navMobileBtn bg-red-500 hover:bg-red-600"
@@ -112,6 +125,12 @@ const Home = () => {
                     Welcome to Taskify!
                 </h2>
             </div>
+
+            <NewTaskModal
+                isOpen={isModalOpen}
+                closeModal={closeModal}
+                addTask={addTask}
+            />
         </div>
     );
 };

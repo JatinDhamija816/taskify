@@ -53,6 +53,7 @@ const Login = () => {
                         onChange={handleChange}
                         placeholder="john@example.com"
                         className="input"
+                        required
                     />
                 </div>
 
@@ -71,7 +72,7 @@ const Login = () => {
                             onChange={handleChange}
                             placeholder="Enter your password"
                             className="outline-none w-full"
-
+                            required
                         />
                         <div onClick={() => setShowPassword(!showPassword)} className="text-xl">
                             {showPassword ? <FaRegEye /> : <FaEye />}
