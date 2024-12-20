@@ -2,8 +2,10 @@ import { useState } from "react";
 import { FaEye, FaRegEye } from "react-icons/fa";
 import AuthLink from "./AuthLink";
 import { login } from "../utils/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate()
     const [user, setUser] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false)
 
@@ -14,15 +16,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Make the login request
-            const res = await login(user); // Assuming `login` is an API call function
-            const { message } = res.data;
-            console.log(res)
-            console.log(message); // Log the success message
+            const res = await login(user);
 
+            if (res.data.success) {
+                alert('Login successful');
+                navigate('/')
+            }
 
-            alert('Login successful');
-            // Redirect user or perform other actions
         } catch (error) {
             console.error('Error during login:', error);
             alert('Login failed. Please try again.');

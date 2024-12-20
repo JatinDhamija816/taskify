@@ -2,8 +2,10 @@ import { useState } from "react";
 import { FaEye, FaRegEye } from "react-icons/fa";
 import AuthLink from "./AuthLink";
 import { register } from "../utils/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+    const navigate = useNavigate()
     const [user, setUser] = useState({ name: "", email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false)
 
@@ -16,8 +18,13 @@ const Register = () => {
         try {
             const res = await register(user)
 
+            if (res.data.success) {
+                alert(res.data.message);
+                navigate('/')
+            }
+
         } catch (error) {
-            alert('Error', error)
+            alert('Something went wrong', error)
         }
     };
 

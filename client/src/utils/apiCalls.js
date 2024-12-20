@@ -13,7 +13,7 @@ export const register = async (userData) => {
 export const login = async (loginData) => {
     try {
         const res = await axios.post(`${SERVER_PORT}/users/login`, loginData, {
-            withCredentials: true, // Allow cookies to be sent and received
+            withCredentials: true,
         })
         return res
     } catch (error) {
@@ -24,8 +24,20 @@ export const login = async (loginData) => {
 export const check_login = async () => {
     try {
         const response = await axios.get(`${SERVER_PORT}/users/check_login`, {
-            withCredentials: true, // Send cookies with request
+            withCredentials: true,
         });
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const logout = async () => {
+    try {
+        const response = await axios.post(`${SERVER_PORT}/users/logout`, {},
+            { withCredentials: true }
+        )
 
         return response
     } catch (error) {

@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { check_login } from "../utils/apiCalls";
+import { check_login, logout } from "../utils/apiCalls";
 
 const Home = () => {
     const [sideButton, setSideButton] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        // Check login status from the backend
         const checkLoginStatus = async () => {
             try {
                 const res = await check_login()
@@ -23,9 +22,17 @@ const Home = () => {
         checkLoginStatus();
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            await logout()
+            setIsLoggedIn(false);
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
+
     return (
         <div className="min-h-screen flex flex-col bg-gray-100">
-            {/* Navbar */}
             <div className="flex justify-between items-center bg-gray-800 py-4 px-6 shadow-md">
                 <div>
                     <h1 className="text-2xl font-bold text-white italic font-mono">
@@ -33,7 +40,6 @@ const Home = () => {
                     </h1>
                 </div>
 
-                {/* Side Button */}
                 <div
                     onClick={() => setSideButton(!sideButton)}
                     className="md:hidden cursor-pointer"
@@ -48,9 +54,17 @@ const Home = () => {
                 {/* Navbar Buttons (visible on desktop) */}
                 <div className="hidden md:flex space-x-4">
                     {isLoggedIn ? (
-                        <Link to="/new-task">
-                            <button className="navDesktopBtn">+ New Task</button>
-                        </Link>
+                        <>
+                            <Link to="/new-task">
+                                <button className="navDesktopBtn">+ New Task</button>
+                            </Link>
+                            <button
+                                onClick={handleLogout}
+                                className="navDesktopBtn bg-red-500 hover:bg-red-600"
+                            >
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <>
                             <Link to="/register">
@@ -68,9 +82,17 @@ const Home = () => {
             {sideButton && (
                 <div className="bg-gray-800 md:hidden text-white w-full">
                     {isLoggedIn ? (
-                        <Link to="/new-task">
-                            <button className="navMobileBtn">+ New Task</button>
-                        </Link>
+                        <>
+                            <Link to="/new-task">
+                                <button className="navMobileBtn">+ New Task</button>
+                            </Link>
+                            <button
+                                onClick={handleLogout}
+                                className="navMobileBtn bg-red-500 hover:bg-red-600"
+                            >
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <>
                             <Link to="/register">
