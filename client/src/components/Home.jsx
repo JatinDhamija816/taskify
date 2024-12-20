@@ -42,11 +42,9 @@ const Home = () => {
         setIsModalOpen(false);
     };
 
-    const addTask = (taskData) => {
-        // Here, send the taskData to your backend API to store it
-        console.log('Task Added:', taskData);
-        // You can use Axios or Fetch here to make the API call.
-    };
+    const closeSideBar = () => {
+        setSideButton(false)
+    }
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-100">
@@ -129,7 +127,7 @@ const Home = () => {
             <NewTaskModal
                 isOpen={isModalOpen}
                 closeModal={closeModal}
-                addTask={addTask}
+                closeSide={closeSideBar}
             />
         </div>
     );
