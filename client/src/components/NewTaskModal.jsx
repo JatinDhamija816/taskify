@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import Modal from 'react-modal'; // or your preferred modal library
+import { createTask } from '../utils/apiCalls';
 
-const NewTaskModal = ({ isOpen, closeModal, addTask }) => {
+const NewTaskModal = ({ isOpen, closeModal, closeSide }) => {
     const [taskData, setTaskData] = useState({
         title: '',
         description: '',
@@ -19,11 +20,29 @@ const NewTaskModal = ({ isOpen, closeModal, addTask }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Add the task (You will call your addTask API or method here)
-        addTask(taskData);
-        closeModal(); // Close the modal after adding the task
+
+        try {
+            const res = await createTask(taskData)
+
+            if (res.data.success) {
+                alert(res.data.message)
+            }
+            setTaskData({
+                title: '',
+                description: '',
+                dueDate: '',
+                priority: 'Medium',
+                status: 'Pending',
+            })
+        } catch (error) {
+            alert('Something went wrong ', error)
+        } finally {
+            closeModal(); // Close the modal after adding the task
+            closeSide()
+        }
     };
 
     return (
@@ -147,7 +166,8 @@ const NewTaskModal = ({ isOpen, closeModal, addTask }) => {
 NewTaskModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,  // isOpen should be a boolean
     closeModal: PropTypes.func.isRequired,  // closeModal should be a function
-    addTask: PropTypes.func.isRequired,  // addTask should be a function
+    isSideBar: PropTypes.bool.isRequired,
+    closeSide: PropTypes.func.isRequired
 };
 
 export default NewTaskModal;

@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { register } from '../controllers/register.js'
-import { login } from '../controllers/login.js'
-import { check_login } from '../controllers/check_login.js'
-import { logout } from '../controllers/logout.js'
+import { register } from '../controllers/users/register.js'
+import { logout } from '../controllers/users/logout.js'
+import { login } from '../controllers/users/login.js'
+import { check_login } from '../controllers/users/check_login.js'
 
 const userRouter = Router()
 

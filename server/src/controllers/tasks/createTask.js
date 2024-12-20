@@ -1,9 +1,9 @@
-import { verifyToken } from "../utils/verifyToken.js";
+import { verifyToken } from "../../utils/verifyToken.js";
+import Task from '../../models/Task.js';
 
-// Endpoint to check login status
-export const check_login = async (req, res) => {
+export const createTask = async (req, res) => {
+
     try {
-        // Get the authToken cookie
         const authToken = req.cookies.accessToken;
 
         if (!authToken) {
@@ -25,11 +25,24 @@ export const check_login = async (req, res) => {
             });
         }
 
-        // Token is valid; user is logged in
-        return res.status(200).json({
-            isLoggedIn: true,
-            user: userData
+        const { title, description, dueDate, priority, status } = req.body;
+
+        const newTask = new Task({
+            title,
+            description,
+            dueDate,
+            priority,
+            status,
+            userId: userData.userId
         });
+        await newTask.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Task Created Successful',
+            newTask
+        });
+
     } catch (error) {
         return res.status(500).json({
             success: false,

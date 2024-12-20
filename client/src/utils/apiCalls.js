@@ -44,3 +44,15 @@ export const logout = async () => {
         return error
     }
 }
+
+export const createTask = async (data) => {
+    try {
+        const response = await axios.post(`${SERVER_PORT}/tasks/create`, data,
+            { withCredentials: true }
+        )
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
