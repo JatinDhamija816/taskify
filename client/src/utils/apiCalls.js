@@ -20,3 +20,15 @@ export const login = async (loginData) => {
         return error
     }
 }
+
+export const check_login = async () => {
+    try {
+        const response = await axios.get(`${SERVER_PORT}/users/check_login`, {
+            withCredentials: true, // Send cookies with request
+        });
+
+        return response
+    } catch (error) {
+        return error
+    }
+}

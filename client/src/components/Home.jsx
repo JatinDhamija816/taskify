@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { check_login } from "../utils/apiCalls";
 
 const Home = () => {
     const [sideButton, setSideButton] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        // Check login status from the backend
+        const checkLoginStatus = async () => {
+            try {
+                const res = await check_login()
+                setIsLoggedIn(res.data.isLoggedIn);
+            } catch (error) {
+                setIsLoggedIn(false);
+                console.log(error.message)
+            }
+        };
+
+        checkLoginStatus();
+    }, []);
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-100">
@@ -30,32 +47,40 @@ const Home = () => {
 
                 {/* Navbar Buttons (visible on desktop) */}
                 <div className="hidden md:flex space-x-4">
-                    <Link to="/register">
-                        <button className="navDesktopBtn">
-                            Register
-                        </button>
-                    </Link>
-                    <Link to="/login">
-                        <button className="navDesktopBtn">
-                            Login
-                        </button>
-                    </Link>
+                    {isLoggedIn ? (
+                        <Link to="/new-task">
+                            <button className="navDesktopBtn">+ New Task</button>
+                        </Link>
+                    ) : (
+                        <>
+                            <Link to="/register">
+                                <button className="navDesktopBtn">Register</button>
+                            </Link>
+                            <Link to="/login">
+                                <button className="navDesktopBtn">Login</button>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
 
             {/* Side Menu (for mobile) */}
             {sideButton && (
                 <div className="bg-gray-800 md:hidden text-white w-full">
-                    <Link to="/register">
-                        <button className="navMobileBtn">
-                            Register
-                        </button>
-                    </Link>
-                    <Link to="/login">
-                        <button className="navMobileBtn">
-                            Login
-                        </button>
-                    </Link>
+                    {isLoggedIn ? (
+                        <Link to="/new-task">
+                            <button className="navMobileBtn">+ New Task</button>
+                        </Link>
+                    ) : (
+                        <>
+                            <Link to="/register">
+                                <button className="navMobileBtn">Register</button>
+                            </Link>
+                            <Link to="/login">
+                                <button className="navMobileBtn">Login</button>
+                            </Link>
+                        </>
+                    )}
                 </div>
             )}
 
