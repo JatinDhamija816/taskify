@@ -3,7 +3,9 @@ import axios from 'axios'
 
 export const register = async (userData) => {
     try {
-        const res = await axios.post(`${SERVER_PORT}/users/register`, userData)
+        const res = await axios.post(`${SERVER_PORT}/users/register`, userData, {
+            withCredentials: true,
+        })
         return res
     } catch (error) {
         return error
@@ -48,6 +50,18 @@ export const logout = async () => {
 export const createTask = async (data) => {
     try {
         const response = await axios.post(`${SERVER_PORT}/tasks/create`, data,
+            { withCredentials: true }
+        )
+
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const getTask = async () => {
+    try {
+        const response = await axios.get(`${SERVER_PORT}/tasks/getTasks`,
             { withCredentials: true }
         )
 
