@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { taskStatus, deleteTask, updateTask } from "../utils/apiCalls";
+import Filters from "./Filters";
 
 const Main = () => {
     const { tasks, setRefresh, filteredTasks } = useContext(UserContext);
@@ -78,6 +79,8 @@ const Main = () => {
 
     return (
         <div className="max-w-4xl mx-auto">
+            <Filters />
+
             <div className="flex-grow flex justify-center items-center text-center mt-10">
                 <h1 className="text-4xl font-bold text-blue-600 italic">
                     Total Task {displayedTasks.length}

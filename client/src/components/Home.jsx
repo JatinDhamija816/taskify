@@ -6,7 +6,6 @@ import Register from "./Register";
 import Login from "./Login";
 import Sidebar from "./Sidebar";
 import AddTask from "./AddTask";
-import Filters from "./Filters";
 
 const Home = () => {
     const { sideBar, addTaskModal } = useContext(UserContext);
@@ -18,7 +17,6 @@ const Home = () => {
             ) : (
                 <>
                     {addTaskModal && <AddTask />}
-                    <Filters />
                     <Routes>
                         <Route path="/" element={<Main />} />
                         <Route path="/register" element={<Register />} />
