@@ -58,19 +58,19 @@ Taskify is a feature-rich To-Do List application built using the MERN stack. It 
 
 1. Clone the repository:
    ```bash
-   git clone
+   git clone https://github.com/JatinDhamija816/taskify
    cd taskify
    ```
 
 2. Install dependencies:
    - For the backend:
      ```bash
-     cd backend
+     cd server
      npm install
      ```
    - For the frontend:
      ```bash
-     cd ../frontend
+     cd ../client
      npm install
      ```
 
@@ -78,42 +78,50 @@ Taskify is a feature-rich To-Do List application built using the MERN stack. It 
    - Create a `.env` file in the backend directory with the following variables:
      ```env
      MONGO_URI=your-mongodb-uri
-     JWT_SECRET=your-jwt-secret
-     REFRESH_TOKEN_SECRET=your-refresh-token-secret
+     JWT_ACCESS_SECRET=your-access-token-secret
+     JWT_REFRESH_SECRET=your-refresh-token-secret
+     ACCESS_TOKEN_EXPIRY=3600000  //(1H)
+     REFRESH_TOKEN_EXPIRY=604800000   //(7D)
+     ACCESS_TOKEN_EXPIRY_STR=1h
+     REFRESH_TOKEN_EXPIRY_STR=7d
+     PORT=8000
+     NODE_ENV=production
      ```
-
 4. Start the development servers:
    - Backend:
      ```bash
-     cd backend
+     cd server
      npm run dev
      ```
    - Frontend:
      ```bash
-     cd ../frontend
+     cd ../client
      npm start
      ```
 
 5. Open the application:
-   - The frontend will be accessible at `http://localhost:3000`.
-   - The backend API will run at `http://localhost:5000`.
+   - The frontend will be accessible at `http://localhost:5173`.
+   - The backend API will run at `http://localhost:8000`.
 
 ## Folder Structure
 
 ```
 Taskify/
-|-- backend/
-|   |-- controllers/
-|   |-- models/
-|   |-- routes/
-|   |-- middleware/
-|   |-- .env
-|   |-- server.js
-|-- frontend/
+|-- server/
+|   |--src/
+|     |-- config/
+|     |-- controllers/
+|     |-- models/
+|     |-- routes/
+|     |-- middleware/
+|     |-- utils/
+|     |-- .env
+|     |-- index.js
+|-- client/
 |   |-- src/
 |       |-- components/
 |       |-- context/
-|       |-- pages/
+|       |-- utils/
 |       |-- App.js
 |       |-- index.js
 |   |-- public/
@@ -130,11 +138,10 @@ Taskify/
    - Add sorting and filtering options.
 3. **UI/UX Enhancements**:
    - Ensure mobile responsiveness.
-   - Implement dark/light mode.
 4. **Testing**:
    - Write unit tests and integration tests for backend APIs.
 5. **Deployment**:
-   - Host the frontend and backend on a cloud platform (e.g., Vercel, Heroku).
+   - Host the frontend and backend on a cloud platform (e.g., Vercel, Render).
 
 ## Contributing
 
