@@ -14,10 +14,9 @@ const AuthLink = ({ text, to }) => {
     );
 };
 
-// Define PropTypes for validation
 AuthLink.propTypes = {
-    text: PropTypes.string.isRequired, // 'text' must be a string and is required
-    to: PropTypes.string.isRequired,   // 'to' must be a string and is required
+    text: PropTypes.string.isRequired,
+    to: PropTypes.string.isRequired,
 };
 
 export default AuthLink;

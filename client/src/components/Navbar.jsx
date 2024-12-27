@@ -1,128 +1,76 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
-import { check_login, logout } from "../utils/apiCalls";
-import NewTaskModal from "./NewTaskModal";
+import { logout } from "../utils/apiCalls";
 
 const Navbar = () => {
-    const [sideButton, setSideButton] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { sideBar, setSideBar, isLoggedIn, setIsLoggedIn, addTaskModal, setAddTaskModal } = useContext(UserContext);
 
-    useEffect(() => {
-        const checkLoginStatus = async () => {
-            try {
-                const res = await check_login()
-                setIsLoggedIn(res.data.isLoggedIn);
-            } catch (error) {
-                setIsLoggedIn(false);
-                console.log(error.message)
-            }
-        };
-
-        checkLoginStatus();
-    }, []);
-
-    const handleLogout = async () => {
+    const logoutApi = async () => {
         try {
-            await logout()
-            setIsLoggedIn(false);
+            const res = await logout()
+            if (res.success) {
+                setIsLoggedIn(false)
+                alert(res.message)
+            }
         } catch (error) {
-            alert('Logout failed', error)
-            console.error("Logout failed:", error);
+            alert('Something went wrong')
+            throw new error
         }
-    };
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const closeSideBar = () => {
-        setSideButton(false)
     }
 
     return (
-        <div>
-            <div className="flex justify-between items-center bg-gray-800 py-4 px-6 shadow-md">
-                <div>
-                    <h1 className="text-2xl font-bold text-white italic font-mono">
-                        taskify
-                    </h1>
-                </div>
+        <nav className="bg-gray-100 shadow-md">
+            <div className="flex justify-between items-center px-5 py-4">
+                <Link to="/">
+                    <div className="logo">
+                        Taskify
+                    </div>
+                </Link>
 
                 <div
-                    onClick={() => setSideButton(!sideButton)}
-                    className="md:hidden cursor-pointer"
+                    onClick={() => setSideBar(!sideBar)}
+                    className="md:hidden cursor-pointer text-blue-600"
                 >
-                    {sideButton ? (
-                        <IoMdClose size={30} className="text-white" />
+                    {sideBar ? (
+                        <IoMdClose size={24} />
                     ) : (
-                        <FaBars size={30} className="text-white" />
+                        <FaBars size={24} />
                     )}
                 </div>
 
-                {/* Navbar Buttons (visible on desktop) */}
-                <div className="hidden md:flex space-x-4">
-                    {isLoggedIn ? (
-                        <>
-                            <button onClick={openModal} className="navDesktopBtn">+ New Task</button>
-                            <button
-                                onClick={handleLogout}
-                                className="navDesktopBtn bg-red-500 hover:bg-red-600"
-                            >
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/register">
-                                <button className="navDesktopBtn">Register</button>
-                            </Link>
-                            <Link to="/login">
-                                <button className="navDesktopBtn">Login</button>
-                            </Link>
-                        </>
-                    )}
+                <div className="hidden md:flex space-x-5">
+                    {
+                        isLoggedIn ?
+                            <div className="hidden md:flex space-x-3">
+                                <div className="desktopBtn" onClick={() => setAddTaskModal(!addTaskModal)}>
+                                    + Add Task
+                                </div>
+                                <Link to="/" onClick={logoutApi}>
+                                    <div className="desktopBtn">
+                                        Logout
+                                    </div>
+                                </Link>
+                            </div>
+                            :
+                            <div className="hidden md:flex space-x-3">
+                                <Link to="/register">
+                                    <div className="desktopBtn">
+                                        Register
+                                    </div>
+                                </Link>
+                                <Link to="/login">
+                                    <div className="desktopBtn">
+                                        Login
+                                    </div>
+                                </Link>
+                            </div>
+                    }
                 </div>
             </div>
-
-            {/* Side Menu (for mobile) */}
-            {sideButton && (
-                <div className="bg-gray-800 md:hidden text-white w-full">
-                    {isLoggedIn ? (
-                        <>
-                            <button onClick={openModal} className="navMobileBtn">+ New Task</button>
-                            <button
-                                onClick={handleLogout}
-                                className="navMobileBtn bg-red-500 hover:bg-red-600"
-                            >
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/register">
-                                <button className="navMobileBtn">Register</button>
-                            </Link>
-                            <Link to="/login">
-                                <button className="navMobileBtn">Login</button>
-                            </Link>
-                        </>
-                    )}
-                </div>
-            )}
-
-            <NewTaskModal
-                isOpen={isModalOpen}
-                closeModal={closeModal}
-                closeSide={closeSideBar}
-            />
-        </div>
+        </nav>
     );
 };
 

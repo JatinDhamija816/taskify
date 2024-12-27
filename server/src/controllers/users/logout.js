@@ -1,28 +1,30 @@
 export const logout = async (req, res) => {
-    // Clear the authToken cookie
     try {
-        res.clearCookie("accessToken", {
+        const isProduction = process.env.NODE_ENV === 'production';
+
+        res.clearCookie('accessToken', {
             httpOnly: true,
-            secure: false, // Use true if your app is served over HTTPS
-            sameSite: "strict",
-            expires: new Date(0),
+            secure: isProduction,
+            sameSite: 'Strict',
+            path: '/',
         });
 
-        res.clearCookie("refreshToken", {
+        res.clearCookie('refreshToken', {
             httpOnly: true,
-            secure: false, // Use true if your app is served over HTTPS
-            sameSite: "strict",
-            expires: new Date(0),
+            secure: isProduction,
+            sameSite: 'Strict',
+            path: '/',
         });
 
         return res.status(200).json({
             success: true,
-            message: "Logged out successfully"
+            message: 'Logged out successfully.',
         });
+
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: error.message || 'Internal Server Error'
-        })
+            message: 'An error occurred during logout. Please try again.',
+        });
     }
-}
+};

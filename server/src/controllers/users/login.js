@@ -1,76 +1,70 @@
 import bcrypt from 'bcrypt';
-import { generateTokens } from '../../utils/tokenUtils.js';
+import {
+    EMAIL_REGEX,
+    JWT_ACCESS_TOKEN_EXPIRATION_MS,
+    JWT_REFRESH_TOKEN_EXPIRATION_MS,
+} from '../../config/constants.js';
 import User from '../../models/User.js';
+import { generateAuthTokens } from '../../utils/tokenUtils.js';
+import { setAuthCookies } from '../../utils/cookieUtils.js';
 
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if all fields are provided
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields are required',
+                message: 'Email and password are required.',
             });
         }
 
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
+        const sanitizedEmail = email.trim().toLowerCase();
+        const sanitizedPassword = password.trim();
+
+        if (!EMAIL_REGEX.test(sanitizedEmail)) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid email format',
+                message: 'Invalid email format.',
             });
         }
 
-        // Check if the email exists in the database
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
+        const existingUser = await User.findOne({ email: sanitizedEmail });
         if (!existingUser) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid credentials', // Generic message to prevent user enumeration
+                message: 'Invalid email or password.',
             });
         }
 
-        // Compare passwords
-        const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+        const isPasswordValid = await bcrypt.compare(sanitizedPassword, existingUser.password);
         if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid credentials', // Generic message to prevent user enumeration
+                message: 'Invalid email or password.',
             });
         }
 
-        // Generate both access and refresh tokens using the utility function
-        const { accessToken, refreshToken } = generateTokens(existingUser._id, existingUser.email);
+        const { accessToken, refreshToken } = generateAuthTokens(existingUser._id, existingUser.email);
 
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            secure: false,
-            path: '/',
-            sameSite: 'Lax',
-            expires: new Date(Date.now() + 3600000), // expires in 1 hour
-        });
+        const accessExpiresAt = new Date(Date.now() + Number(JWT_ACCESS_TOKEN_EXPIRATION_MS));
+        const refreshExpiresAt = new Date(Date.now() + Number(JWT_REFRESH_TOKEN_EXPIRATION_MS));
 
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,
-            path: '/',
-            sameSite: 'Lax',
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // expires in 7 days
-        });
+        setAuthCookies(res, accessToken, refreshToken, accessExpiresAt, refreshExpiresAt);
 
-        // Send response with both tokens
         return res.status(200).json({
             success: true,
             message: 'Login successful',
-
+            user: {
+                id: existingUser._id,
+                name: existingUser.name,
+                email: existingUser.email,
+            },
         });
-
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
-            message: error.message || 'Internal Server Error',
+            message: 'An unexpected error occurred. Please try again later.',
         });
     }
 };

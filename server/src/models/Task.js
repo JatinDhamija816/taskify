@@ -1,18 +1,18 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const taskSchema = new Schema(
     {
         title: {
             type: String,
-            required: true,
+            required: [true, 'Task title is required.'],
+            trim: true,
         },
         description: {
             type: String,
-            required: true,
+            trim: true,
         },
         dueDate: {
             type: Date,
-            required: true,
         },
         priority: {
             type: String,
@@ -26,11 +26,14 @@ const taskSchema = new Schema(
         },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User', // Assuming each task is linked to a user
+            ref: 'User',
             required: true,
         },
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+        versionKey: false
+    }
 );
 
-export default model('Task', taskSchema);
+export default mongoose.model('Task', taskSchema);
