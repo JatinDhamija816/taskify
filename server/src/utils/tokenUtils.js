@@ -1,23 +1,50 @@
 import jwt from 'jsonwebtoken';
+import {
+    JWT_ACCESS_SECRET,
+    JWT_ACCESS_TOKEN_EXPIRATION_STR,
+    JWT_REFRESH_SECRET,
+    JWT_REFRESH_TOKEN_EXPIRATION_STR
+} from '../config/constants.js';
 
-// Function to generate access and refresh tokens
-export const generateTokens = (userId, email) => {
-    const accessTokenExpiration = process.env.JWT_ACCESS_EXPIRATION || '1h'; // Default to '1h' if not specified
-    const refreshTokenExpiration = process.env.JWT_REFRESH_EXPIRATION || '7d'; // Default to '7d' if not specified
+export const generateAuthTokens = (userId, email) => {
+    try {
+        const accessToken = generateAccessToken(userId, email);
+        const refreshToken = generateRefreshToken(userId, email);
 
-    // Generate Access Token
-    const accessToken = jwt.sign(
-        { userId, email },
-        process.env.JWT_ACCESS_SECRET, // Secret key for access token
-        { expiresIn: accessTokenExpiration } // Access token expiration from .env
-    );
-
-    // Generate Refresh Token
-    const refreshToken = jwt.sign(
-        { userId, email },
-        process.env.JWT_REFRESH_SECRET, // Secret key for refresh token
-        { expiresIn: refreshTokenExpiration } // Refresh token expiration from .env
-    );
-
-    return { accessToken, refreshToken };
+        return { accessToken, refreshToken };
+    } catch (error) {
+        throw new Error('Error generating auth tokens');
+    }
 };
+
+export const generateAccessToken = (userId, email) => {
+    try {
+        return jwt.sign(
+            { userId, email },
+            JWT_ACCESS_SECRET,
+            { expiresIn: JWT_ACCESS_TOKEN_EXPIRATION_STR }
+        );
+    } catch (error) {
+        throw new Error('Error generating access token');
+    }
+};
+
+export const generateRefreshToken = (userId, email) => {
+    try {
+        return jwt.sign(
+            { userId, email },
+            JWT_REFRESH_SECRET,
+            { expiresIn: JWT_REFRESH_TOKEN_EXPIRATION_STR }
+        );
+    } catch (error) {
+        throw new Error('Error generating refresh token');
+    }
+};
+
+export const verifyAccessToken = (token) => {
+    return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+};
+
+export const verifyRefreshToken = (token) => {
+    return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+};  
