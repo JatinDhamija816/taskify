@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const SERVER_PORT = 'https://taskify-lyok.onrender.com'
+const SERVER_PORT = 'https://taskify-lyok.onrender.com/api/v1'
 
 export const register = async (userData) => {
     try {
