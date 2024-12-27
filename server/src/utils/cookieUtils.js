@@ -11,7 +11,7 @@ export const setAuthCookies = (
         httpOnly: true,
         secure: isProduction,
         path: '/',
-        sameSite: 'Lax',
+        sameSite: 'None',
         expires: accessExpiresAt,
     });
 
@@ -19,7 +19,7 @@ export const setAuthCookies = (
         httpOnly: true,
         secure: isProduction,
         path: '/',
-        sameSite: 'Lax',
+        sameSite: 'None',
         expires: refreshExpiresAt,
     });
 };

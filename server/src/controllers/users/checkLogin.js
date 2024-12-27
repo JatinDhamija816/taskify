@@ -9,7 +9,7 @@ const refreshSession = (res, refreshTokenData) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         path: "/",
-        sameSite: "Lax",
+        sameSite: "None",
         expires: accessExpiresAt,
     });
 

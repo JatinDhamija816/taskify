@@ -5,14 +5,14 @@ export const logout = async (req, res) => {
         res.clearCookie('accessToken', {
             httpOnly: true,
             secure: isProduction,
-            sameSite: 'Strict',
+            sameSite: 'None',
             path: '/',
         });
 
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: isProduction,
-            sameSite: 'Strict',
+            sameSite: 'None',
             path: '/',
         });
 
